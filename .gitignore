@@ -1,2 +1,9 @@
 .vscode
+*/*.a
 */*.o
+*.bin
+*/*.bin
+*.img
+bochsrc
+Makefile
+krnl.map
