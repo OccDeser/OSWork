@@ -70,10 +70,9 @@ PUBLIC int do_fork()
 					(ppd->limit_high_attr2 & 0xF), 16,
 					ppd->limit_low);
 	/* size of T-seg, in bytes */
-	// int caller_T_size  = ((caller_T_limit + 1) *
-	// 		      ((ppd->limit_high_attr2 & (DA_LIMIT_4K >> 8)) ?
-	// 		       4096 : 1));
-	int caller_T_size  = (caller_T_limit + 1);
+	int caller_T_size  = ((caller_T_limit + 1) *
+			      ((ppd->limit_high_attr2 & (DA_LIMIT_4K >> 8)) ?
+			       4096 : 1));
 
 	/* Data & Stack segments */
 	ppd = &proc_table[pid].ldts[INDEX_LDT_RW];
@@ -87,10 +86,9 @@ PUBLIC int do_fork()
 					  0, 0,
 					  ppd->limit_low);
 	/* size of D&S-seg, in bytes */
-	// int caller_D_S_size  = ((caller_T_limit + 1) *
-	// 			((ppd->limit_high_attr2 & (DA_LIMIT_4K >> 8)) ?
-	// 			 4096 : 1));
-	int caller_D_S_size  = (caller_T_limit + 1);
+	int caller_D_S_size  = ((caller_T_limit + 1) *
+				((ppd->limit_high_attr2 & (DA_LIMIT_4K >> 8)) ?
+				 4096 : 1));
 	/* we don't separate T, D & S segments, so we have: */
 	assert((caller_T_base  == caller_D_S_base ) &&
 	       (caller_T_limit == caller_D_S_limit) &&
