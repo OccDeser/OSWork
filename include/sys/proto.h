@@ -122,7 +122,8 @@ PUBLIC void init_screen(TTY* p_tty);
 PUBLIC int  is_current_console(CONSOLE* p_con);
 
 /* proc.c */
-PUBLIC	void	schedule();
+PUBLIC	void	less_task_schedule();
+PUBLIC	void	more_task_schedule();
 PUBLIC	void*	va2la(int pid, void* va);
 PUBLIC	int	ldt_seg_linear(struct proc* p, int idx);
 PUBLIC	void	reset_msg(MESSAGE* p);

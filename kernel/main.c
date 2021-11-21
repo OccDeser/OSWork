@@ -112,6 +112,9 @@ PUBLIC int kernel_main()
 		p->q_sending = 0;
 		p->next_sending = 0;
 
+		// add
+		p->level = 0;
+
 		for (j = 0; j < NR_FILES; j++)
 			p->filp[j] = 0;
 

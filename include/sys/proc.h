@@ -36,13 +36,14 @@ struct proc {
 
         int ticks;                 /* remained ticks */
         int priority;
+	int level;
 
 	/* u32 pid;                   /\* process id passed in from MM *\/ */
 	char name[16];		   /* name of the process */
 
 	int  p_flags;              /**
 				    * process flags.
-				    * A proc is runnable iff p_flags==0
+				    * A proc is runnable if p_flags==0
 				    */
 
 	MESSAGE * p_msg;
