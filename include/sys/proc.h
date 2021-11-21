@@ -76,6 +76,45 @@ struct task {
 	char	name[32];
 };
 
+struct mm_struct 
+{
+    //pml4t_t *pgd;
+
+    unsigned long start_code, end_coed;
+    unsigned long start_data, end_data;
+    unsigned long start_rodata, end_rodata;
+    unsigned long start_brk, end_brk;
+    unsigned long start_stack;
+};
+
+struct thread_struct
+{
+    unsigned long rsp0;
+
+    unsigned long rip;
+    unsigned long rsp;
+
+    unsigned long fs;
+    unsigned long gs;
+
+    unsigned long cr2;
+    unsigned long trap_nr;
+    unsigned long error_code;
+};
+
+struct task_struct {
+    unsigned long state;
+    unsigned long flags;
+
+    struct mm_struct    *mm;
+    struct thread_struct *thread;
+    
+    long pid;
+    long counter;
+    long signal;
+    long priority;
+};
+
 #define proc2pid(x) (x - proc_table)
 
 /* Number of tasks & processes */

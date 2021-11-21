@@ -16,6 +16,7 @@
 #include "console.h"
 #include "global.h"
 #include "proto.h"
+#include "memory.h"
 
 
 /*****************************************************************************
@@ -129,6 +130,7 @@ PUBLIC int kernel_main()
 
 	restart();
 
+    init_memory();
 	while(1){}
 }
 
