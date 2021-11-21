@@ -31,12 +31,17 @@
  *****************************************************************************/
 PUBLIC void clock_handler(int irq)
 {
+	struct proc* p;
+	int proc_num = 0;
+	for (p = &FIRST_PROC; p <= &LAST_PROC; p++) {
+		if(p->p_flags == 0) {
+			proc_num++;
+		}
+	}
 	if (++ticks >= MAX_TICKS)
 		ticks = 0;
 
-	if (p_proc_ready->ticks)
-		p_proc_ready->ticks--;
-
+	
 	if (key_pressed)
 		inform_int(TASK_TTY);
 
@@ -44,12 +49,28 @@ PUBLIC void clock_handler(int irq)
 		return;
 	}
 
-	if (p_proc_ready->ticks > 0) {
+	
+
+	if(proc_num < 6) {
+		if (p_proc_ready->ticks) {
+			p_proc_ready->ticks --;
+		}
+		if (p_proc_ready->ticks > 0) {
 		return;
+		}
+		less_task_schedule();
+	} else {
+		if (p_proc_ready->ticks) {
+			p_proc_ready->ticks -= 3 - p_proc_ready->level;
+			if (p_proc_ready->ticks < 0){
+				p_proc_ready->ticks = 0;
+			}
+		}
+		if (p_proc_ready->ticks > 0) {
+		return;
+		}
+		more_task_schedule();
 	}
-
-	schedule();
-
 }
 
 /*****************************************************************************

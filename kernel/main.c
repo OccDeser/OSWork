@@ -29,7 +29,6 @@ PUBLIC int kernel_main()
 {
 	disp_str("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
 		 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-
 	int i, j, eflags, prio;
         u8  rpl;
         u8  priv; /* privilege */
@@ -112,6 +111,9 @@ PUBLIC int kernel_main()
 		p->has_int_msg = 0;
 		p->q_sending = 0;
 		p->next_sending = 0;
+
+		// add
+		p->level = 0;
 
 		for (j = 0; j < NR_FILES; j++)
 			p->filp[j] = 0;
@@ -307,6 +309,10 @@ void Init()
 	assert(fd_stdout == 1);
 
 	printf("Init() is running ...\n");
+
+	u32 addr = 0x10000;
+	u32 p_addr = get_page_addr(addr);
+	printf("The p_addr: %d\n", p_addr);
 
 	/* extract `cmd.tar' */
 	untar("/cmd.tar");

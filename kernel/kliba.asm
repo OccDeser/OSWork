@@ -25,6 +25,7 @@ global	disable_int
 global	port_read
 global	port_write
 global	glitter
+global  get_page_addr
 
 
 
@@ -288,4 +289,37 @@ glitter:
 	pop	eax
 	ret
 
+; ========================================================================
+;		   u32 get_page_addr(u32 addr);
+; ========================================================================
+get_page_addr:
+	mov eax, [esp + 4]
+	;mov cr3, eax 
+	ret
+
+
+	push ebx
+	push edx
+
+	mov eax, cr3
+	mov edx, eax		; edx = cr3
+	mov ebx, [esp + 12] ; ebx = addr
+	shr	ebx, 22			; get ebx high 10bit
+	mov eax, [edx + ebx]
+
+	mov edx, eax		; edx = PDE
+	mov ebx, [esp + 12] ; ebx = addr
+	and ebx, 3fffffh	; remove addr high 10bit
+	shr ebx, 12			; get ebx mid 10bit
+	mov eax, [edx + ebx]
+
+	mov edx, eax		; edx = PTE
+	mov ebx, [esp + 12] ; ebx = addr
+	and ebx, 0fffh		; remove addr high 20bit
+	mov eax, [edx + ebx] ; eax = physics addr
+
+	pop edx
+	pop ebx
+
+	ret
 

@@ -30,7 +30,7 @@ PRIVATE int  deadlock(int src, int dest);
  * <Ring 0> Choose one proc to run.
  * 
  *****************************************************************************/
-PUBLIC void schedule()
+PUBLIC void less_task_schedule()
 {
 	struct proc*	p;
 	int		greatest_ticks = 0;
@@ -50,6 +50,36 @@ PUBLIC void schedule()
 				if (p->p_flags == 0)
 					p->ticks = p->priority;
 	}
+}
+
+PUBLIC void more_task_schedule()
+{
+	struct proc* p;
+	int greatest_ticks = 0;
+	int COEFF = 20;
+	int QUEUE_NUM = 3;
+
+	while(!greatest_ticks) {
+		for (p = &FIRST_PROC; p <= &LAST_PROC; p++) {
+			if (p->p_flags == 0) {
+				if (p->ticks * (QUEUE_NUM - p->level) * COEFF > greatest_ticks) {
+					greatest_ticks = p->ticks;
+					p_proc_ready = p;
+					if (p->level < 2) {
+						p->level++;
+					}
+				}
+			}
+		}
+
+		if (!greatest_ticks)
+			for (p = &FIRST_PROC; p <= &LAST_PROC; p++)
+				if (p->p_flags == 0)
+					p->ticks = p->priority;
+	}
+
+
+
 }
 
 /*****************************************************************************
@@ -175,7 +205,7 @@ PUBLIC void reset_msg(MESSAGE* p)
 PRIVATE void block(struct proc* p)
 {
 	assert(p->p_flags);
-	schedule();
+	less_task_schedule();
 }
 
 /*****************************************************************************
