@@ -310,7 +310,12 @@ void Init()
 
 	/* extract `cmd.tar' */
 	untar("/cmd.tar");
-			
+	
+	unsigned int cr3 = getcr3();
+	printf("cr3: %d\n", cr3);
+	printf("cr3: %d\n", cr3 << 1);
+	putcr3(cr3 << 1);
+	printf("cr3: %d\n", getcr3());
 
 	char * tty_list[] = {"/dev_tty1", "/dev_tty2"};
 

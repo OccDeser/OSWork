@@ -10,10 +10,14 @@
 INT_VECTOR_SYS_CALL equ 0x90
 _NR_printx	    equ 0
 _NR_sendrec	    equ 1
+_NR_getcr3	    equ 2
+_NR_putcr3	    equ 2
 
 ; 导出符号
 global	printx
 global	sendrec
+global  getcr3
+global  putcr3
 
 bits 32
 [section .text]
@@ -53,3 +57,24 @@ printx:
 
 	ret
 
+; ====================================================================================
+;              int getcr3(void);
+; ====================================================================================
+getcr3:
+	mov	eax, _NR_getcr3
+	int	INT_VECTOR_SYS_CALL
+	ret
+
+; ====================================================================================
+;              void putcr3(unsigned int pdb_addr);
+; ====================================================================================
+putcr3:
+	push	edx
+
+	mov	eax, _NR_putcr3
+	mov	edx, [esp + 4 + 4]
+	int	INT_VECTOR_SYS_CALL
+
+	pop	edx
+
+	ret
