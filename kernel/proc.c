@@ -33,22 +33,73 @@ PRIVATE int  deadlock(int src, int dest);
 PUBLIC void schedule()
 {
 	struct proc*	p;
-	int		greatest_ticks = 0;
+	int queuenum_min = 3;
+	int thnum = 0; //third queue proc num
+	int donenum = 0; //finished proc num
+	int arrivenum = 0; //arrived proc num
 
-	while (!greatest_ticks) {
-		for (p = &FIRST_PROC; p <= &LAST_PROC; p++) {
-			if (p->p_flags == 0) {
-				if (p->ticks > greatest_ticks) {
-					greatest_ticks = p->ticks;
-					p_proc_ready = p;
+	for(p = &FIRST_PROC; p <= &LAST_PROC; p++){
+		if(p->queuenum == 3){
+			thnum++;
+		}
+	}
+	for(p = &FIRST_PROC; p <= &LAST_PROC; p++){
+		if(p->if_arrive == 1){
+			arrivenum++;
+		}
+	}
+
+	if(thnum == arrivenum){ //all in 3rd queue
+		int j = 0;
+		for (j = 0; j < NR_TASKS + NR_PROCS; j++){
+			if((p_proc_ready->ticks < 1) && (p_proc_ready->if_arrive == 1))
+				donenum++;
+			int k = 0;
+			do{
+				p_proc_ready++;
+				if(p_proc_ready >= proc_table+NR_TASKS + NR_PROCS){
+					p_proc_ready = proc_table;
 				}
+				k++;
+			}while((p_proc_ready->if_arrive == 0) && (k < NR_TASKS + NR_PROCS));
+		}
+		j = 0;
+		do{
+			p_proc_ready->status = 1; //waiting
+			p_proc_ready++;
+			if(p_proc_ready >= proc_table+NR_TASKS + NR_PROCS){
+					p_proc_ready = proc_table;
+			}
+			j++;
+		}while(!((p_proc_ready-ticks != 0) && (p_proc_ready->if_arrive == 1)) && (j < NR_TASKS + NR_PROCS));
+		p_proc_ready->status = 0;
+	} else { //find highest priority and earliest arrive process
+		int i = 0;
+		p = p_proc_ready;
+		for(i = 0; i < NR_TASKS + NR_PROCS; i++){
+			p++;
+			p->status = 0; //running
+			if(p >= proc_table+NR_TASKS + NR_PROCS){
+				p = proc_table;
+			}
+			if(!p->if_arrive){
+				continue;
+			}
+			if(p->queuenum < queuenum_min){
+				queuenum_min = p->queuenum;
+				p_proc_ready = p;
 			}
 		}
+		p_proc_ready->status = 0;
+	}
 
-		if (!greatest_ticks)
-			for (p = &FIRST_PROC; p <= &LAST_PROC; p++)
-				if (p->p_flags == 0)
-					p->ticks = p->priority;
+	if(donenum == arrivenum){
+		for(p = &FIRST_PROC; p <= &LAST_PROC; p++){
+			p->queuenum = 1;
+			p->time_remain = FIRST_ROUND_SIZE;
+			p->ticks = p->priority;
+		}
+		p_proc_ready = proc_table;
 	}
 }
 

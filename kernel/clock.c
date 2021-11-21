@@ -37,6 +37,9 @@ PUBLIC void clock_handler(int irq)
 	if (p_proc_ready->ticks)
 		p_proc_ready->ticks--;
 
+	if (p_proc_ready->time_remain)
+		p_proc_ready->time_remain--;
+
 	if (key_pressed)
 		inform_int(TASK_TTY);
 
@@ -44,8 +47,30 @@ PUBLIC void clock_handler(int irq)
 		return;
 	}
 
-	if (p_proc_ready->ticks > 0) {
+	struct proc* p;
+	for(p = &FIRST_PROC; p <= &LAST_PROC; p++) { //search new arrived process
+		if(p->p_flags == 0 && !p->if_arrive) {
+			p->queuenum = 1;
+			p->time_remain = FIRST_ROUND_SIZE;
+			p->if_arrive = 1;
+			p->status = 2; //ready
+		}
+	}
+
+	if(p_proc_ready->ticks<1){ //finish
+		p_proc_ready->queuenum = 3;
+		p_proc_ready->time_remain = 0;
+	}
+	if(p_proc_ready->time_remain > 0) //remain time slice
 		return;
+	if(p_proc_ready->queuenum == 1) {
+		p_proc_ready->time_remain = SECOND_ROUND_SIZE;
+		p_proc_ready->queuenum++;
+	}else if(p_proc_ready->queuenum == 2) {
+		p_proc_ready->time_remain = THIRD_ROUND_SIZE;
+		p_proc_ready->queuenum++;
+	}else if(p_proc_ready->queuenum == 3) {
+		p_proc_ready->time_remain = THIRD_ROUND_SIZE;
 	}
 
 	schedule();

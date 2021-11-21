@@ -31,6 +31,11 @@
 #define	GDT_SIZE	128
 #define	IDT_SIZE	256
 
+/* time slice */
+#define FIRST_ROUND_SIZE 1
+#define SECOND_ROUND_SIZE 2
+#define THIRD_ROUND_SIZE 4
+
 /* 权限 */
 #define	PRIVILEGE_KRNL	0
 #define	PRIVILEGE_TASK	1

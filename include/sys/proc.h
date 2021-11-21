@@ -37,6 +37,11 @@ struct proc {
         int ticks;                 /* remained ticks */
         int priority;
 
+		int queuenum;
+		int time_remain;
+		int status;
+		int if_arrive;
+
 	/* u32 pid;                   /\* process id passed in from MM *\/ */
 	char name[16];		   /* name of the process */
 
