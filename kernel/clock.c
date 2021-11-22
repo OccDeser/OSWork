@@ -55,10 +55,11 @@ PUBLIC void clock_handler(int irq)
 		if (p_proc_ready->ticks) {
 			p_proc_ready->ticks --;
 		}
-		if (p_proc_ready->ticks > 0) {
-		return;
+		if (proc_num > PROC_NUM || p_proc_ready->ticks == 0) {
+			PROC_NUM = proc_num;
+			less_task_schedule();
 		}
-		less_task_schedule();
+		return;
 	} else {
 		if (p_proc_ready->ticks) {
 			p_proc_ready->ticks -= 3 - p_proc_ready->level;
@@ -66,10 +67,11 @@ PUBLIC void clock_handler(int irq)
 				p_proc_ready->ticks = 0;
 			}
 		}
-		if (p_proc_ready->ticks > 0) {
-		return;
+		if (proc_num > PROC_NUM || p_proc_ready->ticks == 0) {
+			PROC_NUM = proc_num;
+			more_task_schedule();
 		}
-		more_task_schedule();
+		return;
 	}
 }
 

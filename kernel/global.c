@@ -23,6 +23,8 @@
 
 PUBLIC	struct proc proc_table[NR_TASKS + NR_PROCS];
 
+PUBLIC int PROC_NUM;
+
 /* 注意下面的 TASK 的顺序要与 const.h 中对应 */
 PUBLIC	struct task	task_table[NR_TASKS] = {
 	/* entry        stack size        task name */
