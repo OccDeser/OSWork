@@ -114,6 +114,7 @@ PUBLIC int kernel_main()
 
 		// add
 		p->level = 0;
+		p->response = 0;
 
 		for (j = 0; j < NR_FILES; j++)
 			p->filp[j] = 0;
