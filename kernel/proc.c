@@ -32,7 +32,7 @@ PRIVATE int  deadlock(int src, int dest);
  *****************************************************************************/
 PUBLIC void less_task_schedule()
 {
-	printl("-");
+	//printl("-");
 	struct proc*	p;
 	int		greatest_ticks = 0;
 
@@ -55,22 +55,22 @@ PUBLIC void less_task_schedule()
 
 PUBLIC void more_task_schedule()
 {
-	printl("+");
+	//printl("+");
 	struct proc* p;
 	int greatest_ticks = 0;
-	int COEFF = 20;
+	int COEFF = 100;
 	int QUEUE_NUM = 3;
 
 	while(!greatest_ticks) {
 		for (p = &FIRST_PROC; p <= &LAST_PROC; p++) {
 			if (p->p_flags == 0) {
 				p->response++;
-				if (p->response > 5 && p->level == 2) {
-					printl("\nIn response.\n");
+				if (p->response > 10 && p->level == 2) {
+					//printl("\nIn response.\n");
 					p->level = 0;
 				}
-				if (p->ticks * (QUEUE_NUM - p->level) * COEFF > greatest_ticks) {
-					greatest_ticks = p->ticks;
+				if (p->priority + (QUEUE_NUM - p->level) * COEFF > greatest_ticks) {
+					greatest_ticks = p->priority + (QUEUE_NUM - p->level) * COEFF;
 					p->response = 0;
 					p_proc_ready = p;
 					if (p->level < 2) {
