@@ -59,7 +59,8 @@ PUBLIC int kernel_main()
 			prio    = 5;
                 }
 
-		strcpy(p->name, t->name);	/* name of the process */
+		strcpy(p->name, t->name);	/* name of the process */		
+		assert(t->name != 0);
 		p->p_parent = NO_TASK;
 
 		if (strcmp(t->name, "INIT") != 0) {
@@ -115,6 +116,13 @@ PUBLIC int kernel_main()
 		// add
 		p->level = 0;
 		p->response = 0;
+		p->first_request_flag = 
+		p->first_request_time = 
+		p->response_flag = 
+		p->response_time = 
+		p->second_response_flag =
+		p->second_response_time = 
+		p->show_flag = 0;
 
 		for (j = 0; j < NR_FILES; j++)
 			p->filp[j] = 0;
@@ -318,22 +326,58 @@ void Init()
 	/* extract `cmd.tar' */
 	untar("/cmd.tar");
 	
-	unsigned int cr3 = getcr3();
-	printf("cr3: %d\n", cr3);
-	printf("cr3: %d\n", cr3 << 1);
-	putcr3(cr3 << 1);
-	printf("cr3: %d\n", getcr3());
+	// unsigned int cr3 = getcr3();
+	// printf("cr3: %d\n", cr3);
+	// printf("cr3: %d\n", cr3 << 1);
+	// putcr3(cr3 << 1);
+	// printf("cr3: %d\n", getcr3());
 
 	char * tty_list[] = {"/dev_tty1", "/dev_tty2"};
 
+	STAT_FLAG = 1;
+
 	int i;
+	struct proc* p;
 	for (i = 0; i < sizeof(tty_list) / sizeof(tty_list[0]); i++) {
 		int pid = fork();
 		if (pid != 0) { /* parent process */
-			printf("[parent is running, child pid:%d]\n", pid);
+			// printf("[parent is running, child pid:%d]\n", pid);
+			//printf("TIME: %d\n",TIME);
+			if(i < (sizeof(tty_list) / sizeof(tty_list[0])) - 1) {
+				continue;
+			}
+			delay(200);
+			for (p = &FIRST_PROC; p <= &LAST_PROC; p++) {
+				if(!p->name) {
+					continue;
+				} 
+				if(p->first_request_flag && p->show_flag == 0) {
+					printf("{%s} start at: [%d]\n", p->name, p->first_request_time);					
+					// p->first_request_flag = 0;
+					p->show_flag = 1;
+				}
+				if(p->response_flag && p->second_response_flag && p->show_flag == 1) {
+					printf("{%s} first response at: [%d], second response at: [%d]\n", p->name, p->response_time, p->second_response_time);
+					// p->response_flag = p->second_response_flag = 0;
+					p->show_flag = 2;
+				}
+				if(p == &LAST_PROC) {
+					p = &FIRST_PROC - 1;
+				}
+			}
+
+
+			
 		}
 		else {	/* child process */
-			printf("[child is running, pid:%d]\n", getpid());
+			// printf("[child is running, pid:%d]\n", getpid());
+			// printf("TIME: %d\n",TIME);
+			// if(proc_table[getpid()].first_request_flag) {
+			// 	printf("%s first request at: %d\n", proc_table[getpid()].name, proc_table[getpid()].first_request_time);
+			// }
+			// if(proc_table[getpid()].response_flag) {
+			// 	printf("%s first response at: %d\n", proc_table[getpid()].name, proc_table[getpid()].response_time);
+			// }
 			close(fd_stdin);
 			close(fd_stdout);
 			
@@ -357,7 +401,13 @@ void Init()
  *======================================================================*/
 void TestA()
 {
-	for(;;);
+	int pid = getpid();
+	for(;;) {
+		if(proc_table[pid].first_request_flag && STAT_FLAG) {
+			//printf("Test A frist request at:\n");
+		}
+		//printf("TaskA pid:%d\n", 1);
+	}
 }
 
 /*======================================================================*
@@ -365,13 +415,31 @@ void TestA()
  *======================================================================*/
 void TestB()
 {
-	for(;;);
+	for(;;) {
+		//printf("B");
+	}
 }
 
 /*======================================================================*
                                TestB
  *======================================================================*/
 void TestC()
+{
+	for(;;) delay(20);
+}
+void TestD()
+{
+	for(;;);
+}
+void TestE()
+{
+	for(;;);
+}
+void TestF()
+{
+	for(;;);
+}
+void TestG()
 {
 	for(;;);
 }

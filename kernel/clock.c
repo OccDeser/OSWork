@@ -31,10 +31,17 @@
  *****************************************************************************/
 PUBLIC void clock_handler(int irq)
 {
+	// if (strcmp(p_proc_ready->name, "TaskA") == 0) {
+	// 	printl("TaskA is schedule.\n");
+	// }
+	if (STAT_FLAG) {
+		TIME++;
+		// printl("STAT_FLAG == 1\n");	
+	}
 	struct proc* p;
 	int proc_num = 0;
 	for (p = &FIRST_PROC; p <= &LAST_PROC; p++) {
-		if(p->p_flags == 0) {
+		if(p->p_flags == 0) {			
 			proc_num++;
 		}
 	}
@@ -53,21 +60,21 @@ PUBLIC void clock_handler(int irq)
 
 	if(proc_num < 3) {
 		if (p_proc_ready->ticks) {
-			p_proc_ready->ticks --;
+			p_proc_ready->ticks--;
 		}
-		if (proc_num > PROC_NUM || p_proc_ready->ticks == 0) {
+		if (p_proc_ready->ticks == 0) {
 			PROC_NUM = proc_num;
 			less_task_schedule();
 		}
 		return;
 	} else {
 		if (p_proc_ready->ticks) {
-			p_proc_ready->ticks -= 3 - p_proc_ready->level;
+			p_proc_ready->ticks--;
 			if (p_proc_ready->ticks < 0){
 				p_proc_ready->ticks = 0;
 			}
-		}
-		if (proc_num > PROC_NUM || p_proc_ready->ticks == 0) {
+		}// proc_num > PROC_NUM || 
+		if (p_proc_ready->ticks == 0) {
 			PROC_NUM = proc_num;
 			more_task_schedule();
 		}

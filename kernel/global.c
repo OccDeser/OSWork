@@ -24,6 +24,8 @@
 PUBLIC	struct proc proc_table[NR_TASKS + NR_PROCS];
 
 PUBLIC int PROC_NUM;
+PUBLIC int STAT_FLAG = 0;
+PUBLIC int TIME = 0;
 
 /* 注意下面的 TASK 的顺序要与 const.h 中对应 */
 PUBLIC	struct task	task_table[NR_TASKS] = {
@@ -41,7 +43,12 @@ PUBLIC	struct task	user_proc_table[NR_NATIVE_PROCS] = {
 	{Init,   STACK_SIZE_INIT,  "INIT" },
 	{TestA,  STACK_SIZE_TESTA, "TestA"},
 	{TestB,  STACK_SIZE_TESTB, "TestB"},
-	{TestC,  STACK_SIZE_TESTC, "TestC"}};
+	{TestC,  STACK_SIZE_TESTC, "TestC"},
+	{TestD,  STACK_SIZE_TESTD, "TestD"},
+	{TestE,  STACK_SIZE_TESTE, "TestE"},
+	{TestF,  STACK_SIZE_TESTF, "TestF"},
+	{TestG,  STACK_SIZE_TESTG, "TestG"},	
+	};
 /* PUBLIC	struct task	user_proc_table[NR_PROCS] = { */
 /* 	{TestA, STACK_SIZE_TESTA, "TestA"}, */
 /* 	{TestB, STACK_SIZE_TESTB, "TestB"}, */

@@ -39,6 +39,14 @@ struct proc {
 	int level;
 	int response;
 
+	int first_request_time;
+	int first_request_flag;
+	int response_time;
+	int response_flag;
+	int second_response_time;
+	int second_response_flag;
+	int show_flag;
+
 	/* u32 pid;                   /\* process id passed in from MM *\/ */
 	char name[16];		   /* name of the process */
 
@@ -83,7 +91,7 @@ struct task {
 /* Number of tasks & processes */
 #define NR_TASKS		5
 #define NR_PROCS		32
-#define NR_NATIVE_PROCS		4
+#define NR_NATIVE_PROCS		8
 #define FIRST_PROC		proc_table[0]
 #define LAST_PROC		proc_table[NR_TASKS + NR_PROCS - 1]
 
@@ -110,6 +118,10 @@ struct task {
 #define STACK_SIZE_TESTA	STACK_SIZE_DEFAULT
 #define STACK_SIZE_TESTB	STACK_SIZE_DEFAULT
 #define STACK_SIZE_TESTC	STACK_SIZE_DEFAULT
+#define STACK_SIZE_TESTD	STACK_SIZE_DEFAULT
+#define STACK_SIZE_TESTE	STACK_SIZE_DEFAULT
+#define STACK_SIZE_TESTF	STACK_SIZE_DEFAULT
+#define STACK_SIZE_TESTG	STACK_SIZE_DEFAULT
 
 #define STACK_SIZE_TOTAL	(STACK_SIZE_TTY + \
 				STACK_SIZE_SYS + \
@@ -119,5 +131,9 @@ struct task {
 				STACK_SIZE_INIT + \
 				STACK_SIZE_TESTA + \
 				STACK_SIZE_TESTB + \
-				STACK_SIZE_TESTC)
+				STACK_SIZE_TESTC + \
+				STACK_SIZE_TESTD + \
+				STACK_SIZE_TESTE + \
+				STACK_SIZE_TESTF + \
+				STACK_SIZE_TESTG)
 

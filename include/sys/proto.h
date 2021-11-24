@@ -43,6 +43,11 @@ PUBLIC int  get_ticks();
 PUBLIC void TestA();
 PUBLIC void TestB();
 PUBLIC void TestC();
+PUBLIC void TestD();
+PUBLIC void TestE();
+PUBLIC void TestF();
+PUBLIC void TestG();
+
 PUBLIC void panic(const char *fmt, ...);
 
 /* i8259.c */

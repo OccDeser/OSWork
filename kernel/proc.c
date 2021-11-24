@@ -39,17 +39,25 @@ PUBLIC void less_task_schedule()
 	while (!greatest_ticks) {
 		for (p = &FIRST_PROC; p <= &LAST_PROC; p++) {
 			if (p->p_flags == 0) {
+				if(!p->first_request_flag && STAT_FLAG) {
+					p->first_request_time = TIME;
+					p->first_request_flag = 1;
+				}
 				if (p->ticks > greatest_ticks) {
 					greatest_ticks = p->ticks;
 					p_proc_ready = p;
 				}
 			}
 		}
-
+		
 		if (!greatest_ticks)
 			for (p = &FIRST_PROC; p <= &LAST_PROC; p++)
 				if (p->p_flags == 0)
 					p->ticks = p->priority;
+	}
+	if(!p_proc_ready->response_flag && STAT_FLAG) {
+		p_proc_ready->response_flag = 1;
+		p_proc_ready->response_time = TIME;
 	}
 }
 
@@ -64,6 +72,10 @@ PUBLIC void more_task_schedule()
 	while(!greatest_ticks) {
 		for (p = &FIRST_PROC; p <= &LAST_PROC; p++) {
 			if (p->p_flags == 0) {
+				if(!p->first_request_flag && STAT_FLAG) {
+					p->first_request_time = TIME;
+					p->first_request_flag = 1;
+				}
 				p->response++;
 				if (p->response > 10 && p->level == 2) {
 					//printl("\nIn response.\n");
@@ -73,6 +85,9 @@ PUBLIC void more_task_schedule()
 					greatest_ticks = p->priority + (QUEUE_NUM - p->level) * COEFF;
 					p->response = 0;
 					p_proc_ready = p;
+					if(STAT_FLAG) {
+						//printl("%s", "asd");
+					}
 					if (p->level < 2) {
 						p->level++;
 					}
@@ -85,9 +100,15 @@ PUBLIC void more_task_schedule()
 				if (p->p_flags == 0)
 					p->ticks = p->priority;
 	}
-
-
-
+	if(p_proc_ready->response_flag && !p_proc_ready->second_response_flag) {
+		p_proc_ready->second_response_flag = 1;
+		p_proc_ready->second_response_time = TIME;
+	}
+	if(!p_proc_ready->response_flag && STAT_FLAG) {
+		p_proc_ready->response_flag = 1;
+		p_proc_ready->response_time = TIME;
+	}
+	p_proc_ready->ticks = p_proc_ready->priority;
 }
 
 /*****************************************************************************

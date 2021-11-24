@@ -64,3 +64,5 @@ extern	char *			logdiskbuf;
 extern	const int		LOGDISKBUF_SIZE;
 
 extern int PROC_NUM;
+extern int STAT_FLAG;
+extern int TIME;
