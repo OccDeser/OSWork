@@ -115,7 +115,7 @@ PUBLIC int kernel_main()
 
 		// add
 		p->level = 0;
-		p->response = 0;
+		p->unresponse = 0;
 		p->first_request_flag = 
 		p->first_request_time = 
 		p->response_flag = 
@@ -123,6 +123,8 @@ PUBLIC int kernel_main()
 		p->second_response_flag =
 		p->second_response_time = 
 		p->show_flag = 0;
+
+		//STAT_FLAG = 1;
 
 		for (j = 0; j < NR_FILES; j++)
 			p->filp[j] = 0;
@@ -346,13 +348,13 @@ void Init()
 			if(i < (sizeof(tty_list) / sizeof(tty_list[0])) - 1) {
 				continue;
 			}
-			delay(200);
+			// delay(200);
 			for (p = &FIRST_PROC; p <= &LAST_PROC; p++) {
 				if(!p->name) {
 					continue;
 				} 
 				if(p->first_request_flag && p->show_flag == 0) {
-					printf("{%s} start at: [%d]\n", p->name, p->first_request_time);					
+					// printf("{%s} start at: [%d]\n", p->name, p->first_request_time);					
 					// p->first_request_flag = 0;
 					p->show_flag = 1;
 				}
@@ -402,12 +404,11 @@ void Init()
 void TestA()
 {
 	int pid = getpid();
-	for(;;) {
-		if(proc_table[pid].first_request_flag && STAT_FLAG) {
-			//printf("Test A frist request at:\n");
-		}
-		//printf("TaskA pid:%d\n", 1);
-	}
+	int start_time = TIME;
+	delay(50);
+	int end_time = TIME;
+	printl("TestA start at %d, end at %d\n", start_time, end_time);
+	for(;;);
 }
 
 /*======================================================================*
@@ -415,9 +416,12 @@ void TestA()
  *======================================================================*/
 void TestB()
 {
-	for(;;) {
-		//printf("B");
-	}
+	int pid = getpid();
+	int start_time = TIME;
+	delay(50);
+	int end_time = TIME;
+	printl("TestB start at %d, end at %d\n", start_time, end_time);
+	for(;;);
 }
 
 /*======================================================================*
@@ -425,22 +429,47 @@ void TestB()
  *======================================================================*/
 void TestC()
 {
-	for(;;) delay(20);
+	int pid = getpid();
+	int start_time = TIME;
+	delay(50);
+	int end_time = TIME;
+	printl("TestC start at %d, end at %d\n", start_time, end_time);
+	for(;;);
 }
 void TestD()
 {
+	int pid = getpid();
+	int start_time = TIME;
+	delay(50);
+	int end_time = TIME;
+	printl("TestD start at %d, end at %d\n", start_time, end_time);
 	for(;;);
 }
 void TestE()
 {
+	int pid = getpid();
+	int start_time = TIME;
+	delay(50);
+	int end_time = TIME;
+	printl("TestE start at %d, end at %d\n", start_time, end_time);
 	for(;;);
 }
 void TestF()
 {
+	int pid = getpid();
+	int start_time = TIME;
+	delay(50);
+	int end_time = TIME;
+	printl("TestF start at %d, end at %d\n", start_time, end_time);
 	for(;;);
 }
 void TestG()
 {
+	int pid = getpid();
+	int start_time = TIME;
+	delay(50);
+	int end_time = TIME;
+	printl("TestG start at %d, end at %d\n", start_time, end_time);
 	for(;;);
 }
 

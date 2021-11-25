@@ -31,13 +31,7 @@
  *****************************************************************************/
 PUBLIC void clock_handler(int irq)
 {
-	// if (strcmp(p_proc_ready->name, "TaskA") == 0) {
-	// 	printl("TaskA is schedule.\n");
-	// }
-	if (STAT_FLAG) {
-		TIME++;
-		// printl("STAT_FLAG == 1\n");	
-	}
+	TIME++;
 	struct proc* p;
 	int proc_num = 0;
 	for (p = &FIRST_PROC; p <= &LAST_PROC; p++) {
@@ -73,7 +67,7 @@ PUBLIC void clock_handler(int irq)
 			if (p_proc_ready->ticks < 0){
 				p_proc_ready->ticks = 0;
 			}
-		}// proc_num > PROC_NUM || 
+		} 
 		if (p_proc_ready->ticks == 0) {
 			PROC_NUM = proc_num;
 			more_task_schedule();

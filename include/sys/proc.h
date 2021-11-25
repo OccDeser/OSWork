@@ -37,7 +37,7 @@ struct proc {
         int ticks;                 /* remained ticks */
         int priority;
 	int level;
-	int response;
+	int unresponse;
 
 	int first_request_time;
 	int first_request_flag;
