@@ -81,7 +81,7 @@ PUBLIC void more_task_schedule()
 					p->first_request_flag = 1;
 				}
 				p->unresponse++;
-				if (p->unresponse > 15 && p->level == 2) {
+				if (p->unresponse > PROC_NUM && p->level == 2) {
 					p->level = 0;
 					p->unresponse = 0;
 				}
@@ -91,9 +91,7 @@ PUBLIC void more_task_schedule()
 					if(STAT_FLAG) {
 						//printl("%s", "asd");
 					}
-					if (p->level < 2) {
-						p->level++;
-					}
+					
 				}
 			}
 		}
@@ -111,8 +109,11 @@ PUBLIC void more_task_schedule()
 		p_proc_ready->response_flag = 1;
 		p_proc_ready->response_time = TIME;
 	}
-	p_proc_ready->ticks = 5 * (3 - p_proc_ready->level);
+	p_proc_ready->ticks = 10 * (3 - p_proc_ready->level);
 	p_proc_ready->unresponse = 0;
+	if (p_proc_ready->level < 2) {
+		p_proc_ready->level++;
+	}
 }
 
 /*****************************************************************************
