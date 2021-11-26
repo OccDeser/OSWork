@@ -109,7 +109,7 @@ PUBLIC void more_task_schedule()
 		p_proc_ready->response_flag = 1;
 		p_proc_ready->response_time = TIME;
 	}
-	p_proc_ready->ticks = 10 * (3 - p_proc_ready->level);
+	p_proc_ready->ticks = 5 * (3 - p_proc_ready->level);
 	p_proc_ready->unresponse = 0;
 	if (p_proc_ready->level < 2) {
 		p_proc_ready->level++;

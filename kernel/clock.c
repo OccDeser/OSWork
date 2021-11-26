@@ -52,7 +52,7 @@ PUBLIC void clock_handler(int irq)
 
 	
 
-	if(proc_num < 300) {
+	if(proc_num < 3) {
 		if (p_proc_ready->ticks) {
 			p_proc_ready->ticks--;
 		}
